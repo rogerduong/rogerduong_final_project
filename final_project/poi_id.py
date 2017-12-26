@@ -55,7 +55,7 @@ features_list_orig = ['poi',
 
 features_list = features_list_orig
 
-n_features = range(4, 8)
+n_features = range(4, 10)
 n_dimensions = range(2, 4)
 
 ### Task 2: Remove outliers
@@ -150,7 +150,7 @@ def find_classifier_POI(features, labels):
     
     pipe = Pipeline([
             ("select_feat", SelectKBest()),
-            ("reduce_dim", None),
+            ("reduce_dim", PCA()),
             ("clf", DecisionTreeClassifier())
             ])
         
