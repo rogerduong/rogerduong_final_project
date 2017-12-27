@@ -1,8 +1,8 @@
 # Identify Fraud from Enron Email
 
 - Roger Duong
-- 17 Dec 2017
-- V2
+- 27 Dec 2017
+- V3
 
 This document is organized as follows:
 
@@ -58,17 +58,49 @@ Pipeline(memory=None,
         Total predictions: 13000        True positives:  538    False positives: 1291   False negatives: 1462   True negatives: 9709
 ```
 
-In order to improve the results, the following features were added:
+In order to improve the representation of the dataset, the following features were added:
 
 - Financial features:
 
-  - the logarithm of total payments, to attenuate the variance between the values.
+  - the logarithm of total payments, in an attempt to attenuate the variance between the values. A quick visualization of the distribution of the dataset shows a highly skewed distribution.
   - the logarithm of total stock value, for the same reason.
 
 - Email features:
 
-  - the proportion of email received by POI, to account for variations in the total number of emails received.
+  - the proportion of email received by POI, to reflect the number of emails relative to the total number of emails received, rather than an absolute amount.
   - the proportion of email sent to POI, for the same reason.
+
+The function `find_classifier_POI` returns a list of all features and their ANOVA f-values (`f_classif`), indicating with a "[x]" the features that are eventually selected by the `SelectKBest` function.
+
+```python
+Selection of the 4 best features:
+Features with [x] are selected
+   [x] salary, (12.31)
+   [ ] to_messages, (0.66)
+   [ ] deferral_payments, (0.44)
+   [ ] total_payments, (6.68)
+   [ ] loan_advances, (5.95)
+   [x] bonus, (15.21)
+   [ ] restricted_stock_deferred, (0.09)
+   [x] total_stock_value, (18.74)
+   [ ] shared_receipt_with_poi, (5.37)
+   [ ] long_term_incentive, (6.82)
+   [x] exercised_stock_options, (19.52)
+   [ ] from_messages, (0.33)
+   [ ] other, (2.99)
+   [ ] from_this_person_to_poi, (1.49)
+   [ ] director_fees, (0.76)
+   [ ] deferred_income, (8.80)
+   [ ] expenses, (5.40)
+   [ ] restricted_stock, (6.62)
+   [ ] from_poi_to_this_person, (3.19)
+   [ ] log_total_payments, (5.28)
+   [ ] log_total_stock_value, (6.11)
+   [ ] proportion_email_from_poi, (1.51)
+   [ ] proportion_email_to_poi, (11.59)
+```
+
+In the chosen algorithm, the SelectKBest function selected 4 features out of the 23 available. None of the features engineered were included in the selection. The engineered features display scores significantly lower than the features selected.
 
 The original dataset is stored in `labels_orig` and `features_orig`, while the enriched dataset with the engineered features is stored in `labels` and `features`.
 
